@@ -1,0 +1,58 @@
+typedef enum {
+  T_Literal,
+  T_Subcall,
+  T_EscapeSequence,
+} ExpressionStringChunkType;
+
+typedef struct {
+  ExpressionStringChunkType type;
+  union {
+    char *text;
+    TaskList subcall;
+    char sequence[2];
+  }
+} ExpressionStringChunk;
+
+void ExpressionStringChunk__print(ExpressionStringChunk *x);
+void ExpressionStringChunk__debug(ExpressionStringChunk *x);
+ExpressionStringChunk *ExpressionStringChunk__read(ExpressionChunkType mode);
+void ExpressionStringChunk__free(ExpressionStringChunk *x);
+
+typedef enum {
+  // T_UnescapedCharacter, // $'\n'
+  T_SinglyQuotedString,
+  T_DoubleQuotedString,
+  T_UnquotedString,
+  T_Glob,
+} ExpressionChunkType;
+
+typedef struct {
+  ExpressionChunkType type;
+  vector /*ExpressionStringChunk*/ chunks;
+} ExpressionChunk;
+
+// Expression resolves into an array of values (due to globbing).
+typedef struct {
+  vector /*ExpressionChunk*/ chunks;
+} Expression;
+
+typedef struct {
+  bool background;
+  vector /*Task*/ tasks;
+} TaskList;
+
+typedef struct {
+  Expression command;
+  vector /*Expression*/ arguments;
+} Task;
+
+typedef enum {
+  T_Stdin,
+  T_Stdout,
+  T_Stderr,
+} RedirectionType;
+
+typedef struct {
+  RedirectionType type;
+  Expression path;
+} Redirection;
