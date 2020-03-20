@@ -1,7 +1,6 @@
 #include "line_processing.h"
 #include "ensure_complete.h"
 #include "ensure_no_pipes.h"
-#include <data_types/kv.h>
 #include <data_types/string.h>
 #include <data_types/vector.h>
 #include <executing/task.h>
@@ -13,12 +12,9 @@ void process_line(char *line) {
   if (!ensure_no_pipes(l))
     return;
 
-  // expand_globs(l); // should happen here?
   vector words = split_into_words(l);
 
-  kv variables = variables_from_state();
-  // eat_variables(words); // TODO: support setting variables
-  expand_variables(words, variables);
+  // eat_variables(words); // FIXME: support setting variables
 
   expand_globs(l);
 
