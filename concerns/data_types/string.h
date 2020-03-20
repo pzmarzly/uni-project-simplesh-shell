@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 
-typedef struct string* string;
+typedef struct string *string;
 
 string string_new();
 size_t string_length(string v);

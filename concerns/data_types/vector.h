@@ -1,8 +1,8 @@
 #pragma once
 #include <stdlib.h>
 
-typedef void* any_t;
-typedef struct vector* vector;
+typedef void *any_t;
+typedef struct vector *vector;
 
 vector vector_new();
 size_t vector_size(vector v);

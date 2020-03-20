@@ -9,7 +9,8 @@ static bool is_complete(string l) {
 
 bool ensure_complete(string l) {
   if (!is_complete(l)) {
-    printf("Error: simplesh does not support commands spanning over multiple lines.\n");
+    printf("Error: simplesh does not support commands spanning over multiple "
+           "lines.\n");
     return false;
   }
   return true;

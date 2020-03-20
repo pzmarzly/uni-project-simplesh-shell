@@ -1,9 +1,9 @@
 #define HOLDS_STATE
 
 #include <parsing/line_processing.h>
-#include <state/state.h>
 #include <readline/history.h>
 #include <readline/readline.h>
+#include <state/state.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
