@@ -42,7 +42,7 @@ void vector_delete_range(vector v, unsigned start, unsigned end) {
   // shift left
   for (unsigned idx = start; idx < end; idx++) {
     if (idx + diff < v->used) {
-      v->raw[i] = v->raw[idx + diff];
+      v->raw[idx] = v->raw[idx + diff];
     }
   }
   v->used -= diff;

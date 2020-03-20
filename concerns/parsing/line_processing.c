@@ -1,24 +1,32 @@
 #include "line_processing.h"
+#include "ensure_complete.h"
+#include "ensure_no_pipes.h"
+#include <data_types/string.h>
+#include <data_types/vector.h>
+#include <executing/task.h>
+#include <data_types/kv.h>
 
 void process_line(char *line) {
   string l = string_from_cstr(line);
-  if (!is_complete(l)) {
-    printf("Error: simplesh does not support commands spanning over multiple lines.\n");
-    return;
-  }
+  if (!ensure_complete(l)) return;
+  if (!ensure_no_pipes(l)) return;
 
-  unsigned commands = count_commands(l);
+  // expand_globs(l); // should happen here?
+  vector words = split_into_words(l);
 
-  for (unsigned i = 0; i < commands; i++) {
-    kv variables = variables_from_state();
-    kv new_variables = eat_variables(l);
-    kv_override(variables, new_variables);
-    expand_variables(l, variables);
+  kv variables = variables_from_state();
+  // eat_variables(words); // TODO: support setting variables
+  expand_variables(words, variables);
 
-    vector words = split_into_words(l);
-    expand_globs(words);
-    string command = eat_command_name(words);
-    vector arguments = eat_arguments(words);
-    vector redirects = eat_redirects(words);
-  }
+  expand_globs(l);
+
+  string command = eat_command_name(words);
+  vector arguments = eat_arguments(words);
+  vector redirects = eat_redirects(words);
+
+  task task = task_new(command, arguments, redirects);
+  task_run(task);
+
+  vector_free(words);
+  string_free(l);
 }

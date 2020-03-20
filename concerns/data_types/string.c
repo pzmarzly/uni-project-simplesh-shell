@@ -1,4 +1,5 @@
 #include "string.h"
+#include "vector.h"
 
 struct string {
   vector storage;

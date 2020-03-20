@@ -1,3 +1,6 @@
+#pragma once
+#include <stdlib.h>
+
 typedef struct string* string;
 
 string string_new();
@@ -11,3 +14,4 @@ void string_insert_empty_range(string v, unsigned start, unsigned len);
 void string_free(string v);
 
 char *string_to_cstr(string v);
+string string_from_cstr(char *cstr);

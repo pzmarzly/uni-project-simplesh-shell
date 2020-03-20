@@ -1,4 +1,4 @@
-override CFLAGS+=-std=c11 -xc -Wall -Wextra `pkg-config --cflags readline`
+override CFLAGS+=-std=c11 -xc -Wall -Wextra `pkg-config --cflags readline` -Iconcerns
 override LDFLAGS+=`pkg-config --libs readline`
 
 default: all
