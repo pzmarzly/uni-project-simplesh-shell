@@ -1,8 +1,6 @@
 #include "task.h"
 
-struct task {
-
-};
+struct task {};
 
 task task_new(string command, vector arguments, vector redirects) {
   task ret = malloc(sizeof(struct task));

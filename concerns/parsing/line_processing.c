@@ -1,8 +1,8 @@
 #include "line_processing.h"
 #include "ensure_complete.h"
 #include "ensure_no_pipes.h"
-#include "split_into_words.h"
 #include "expand_globs.h"
+#include "split_into_words.h"
 #include <data_types/string.h>
 #include <data_types/vector.h>
 #include <executing/task.h>
