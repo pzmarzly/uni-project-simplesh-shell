@@ -29,6 +29,8 @@ void vector_set(vector v, unsigned index, any_t el) {
   if (index >= v->capacity)
     resize(v);
   v->raw[index] = el;
+  if (index >= v->used)
+    v->used = index + 1;
 }
 
 any_t vector_get(vector v, unsigned index) { return v->raw[index]; }

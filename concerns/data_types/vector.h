@@ -1,7 +1,7 @@
 #pragma once
 #include <stdlib.h>
 
-typedef void *any_t;
+typedef unsigned long long any_t;
 typedef struct vector *vector;
 
 vector vector_new();

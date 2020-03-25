@@ -7,18 +7,23 @@ ifeq ($(DEBUG),1)
 endif
 
 default: all
-all: simplesh
+all: simplesh tests
 
-SRCS=$(wildcard *.c) $(wildcard */*/*.c)
+SRCS=$(wildcard */*/*.c)
 OBJS=$(SRCS:.c=.o)
 
-simplesh: ${OBJS}
-	$(CC) ${OBJS} ${LDFLAGS} -o simplesh
+simplesh: simplesh.o ${OBJS}
+	$(CC) $< ${OBJS} ${LDFLAGS} -o $@
+
+tests: tests.o ${OBJS}
+	$(CC) $< ${OBJS} ${LDFLAGS} -o $@
 
 %.o: %.c
 	$(CC) ${CFLAGS} -c -MMD $< -o $@
 
-.PHONY: default all fmt clean
+.PHONY: default all fmt clean tests
+test: tests
+	./tests
 fmt:
 	-clang-format -i *.c || true
 	-clang-format -i *.h || true

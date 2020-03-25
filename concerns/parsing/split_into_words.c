@@ -3,16 +3,20 @@
 #include <string.h>
 
 static char *eat_until(char *s, char delim) {
-  while (s && *s != delim) {
-    if (*s == '\\')
+  while (*s && *s != delim) {
+    if (*s == '\\') {
+      if (*(s + 1))
+        s++;
       s++;
-    if (*s == '\'')
+    } else if (*s == '\'') {
       s = eat_until(s, '\'');
-    if (*s == '\"')
+    } else if (*s == '\"') {
       s = eat_until(s, '\"');
-    s++;
+    } else {
+      s++;
+    }
   }
-  // Now s is either NULL or s[0] == delim.
+  // Now s either s[0] == '\0' or s[0] == delim.
   return s;
 }
 
