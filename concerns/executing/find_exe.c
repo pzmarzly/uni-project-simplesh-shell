@@ -27,12 +27,15 @@ char *find_exe(char *command) {
     memcpy(path + s_dir + 1, command, s_command);
     path[s_dir + 1 + s_command] = '\0';
 
-    if (access(path, X_OK) == 0)
+    if (access(path, X_OK) == 0) {
+      free(dirs);
       return path;
+    }
     free(path);
 
     dir = strtok(NULL, ":");
   }
 
+  free(dirs);
   return NULL;
 }
