@@ -1,6 +1,3 @@
-#define HOLDS_STATE
-
-#include <state/state.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -9,8 +6,6 @@
 #include <parsing/split_into_words.tests.h>
 
 int main() {
-  init_state();
-
   string_tests();
   split_into_words_tests();
   words_tests();
