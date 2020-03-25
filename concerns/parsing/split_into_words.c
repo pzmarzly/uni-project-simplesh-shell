@@ -35,12 +35,12 @@ vector split_into_words(string l) {
   while (true) {
     char *end = eat_until(start, ' ');
     if (end) {
-      vector_push(ret, start);
-      vector_push(ret, end - 1);
+      vector_push(ret, (any_t) start);
+      vector_push(ret, (any_t) end - 1);
       start = end + 1;
     } else {
-      vector_push(ret, start);
-      vector_push(ret, start + strlen(start));
+      vector_push(ret, (any_t) start);
+      vector_push(ret, (any_t) start + strlen(start));
       return ret;
     }
   }
