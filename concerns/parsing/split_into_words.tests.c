@@ -1,8 +1,8 @@
+#include "split_into_words.tests.h"
+#include "split_into_words.h"
+#include <assert.h>
 #include <data_types/string.h>
 #include <data_types/vector.h>
-#include <assert.h>
-#include "split_into_words.h"
-#include "split_into_words.tests.h"
 
 void split_into_words_tests() {
   string s1 = string_from_cstr("");

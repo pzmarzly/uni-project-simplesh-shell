@@ -2,10 +2,10 @@
 #include "ensure_no_pipes.h"
 #include "expand_globs.h"
 #include "split_into_words.h"
+#include <data_types/redirects.h>
 #include <data_types/string.h>
 #include <data_types/vector.h>
 #include <data_types/words.h>
-#include <data_types/redirects.h>
 #include <executing/task.h>
 #include <string.h>
 
@@ -19,10 +19,9 @@ static vector eat_arguments(string line, words words) {
   vector ret = vector_new();
   while (vector_size(words) > 0) {
     char *word = first_word(words, line);
-    if (word[0] == '>' || word[0] == '<'
-      || word[0] == '|')
+    if (word[0] == '>' || word[0] == '<' || word[0] == '|')
       break;
-    vector_push(ret, (any_t) word);
+    vector_push(ret, (any_t)word);
     delete_first_word(words);
   }
   return ret;
@@ -43,11 +42,11 @@ static redirects eat_redirects(string line, vector words) {
     }
 
     if (last_seen) {
-      vector_push(ret, (any_t) last_seen);
-      vector_push(ret, (any_t) word);
+      vector_push(ret, (any_t)last_seen);
+      vector_push(ret, (any_t)word);
     } else if (word[0] == '>' || word[0] == '<') {
-      vector_push(ret, (any_t) word[0]);
-      vector_push(ret, (any_t) (word + 1));
+      vector_push(ret, (any_t)word[0]);
+      vector_push(ret, (any_t)(word + 1));
     }
 
     delete_first_word(words);
@@ -72,12 +71,12 @@ void process_line(char *line) {
   redirects redirects = eat_redirects(l, words);
 
   task task = task_new(command, arguments, redirects);
-  #ifdef DEBUG
+#ifdef DEBUG
   task_debug(task);
-  #endif
+#endif
   task_run(task);
 
-  end:
+end:
   vector_free(words);
   string_free(l);
 }

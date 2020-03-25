@@ -1,6 +1,6 @@
 #pragma once
-#include "vector.h"
 #include "string.h"
+#include "vector.h"
 
 // redirects is a vector where each odd element
 // is a character representing a direction,

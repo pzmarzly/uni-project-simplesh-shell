@@ -1,7 +1,7 @@
-#include "words.h"
 #include "words.tests.h"
-#include <parsing/split_into_words.h>
+#include "words.h"
 #include <assert.h>
+#include <parsing/split_into_words.h>
 #include <string.h>
 
 void words_tests() {

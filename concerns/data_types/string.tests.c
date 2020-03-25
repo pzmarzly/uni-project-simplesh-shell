@@ -1,7 +1,7 @@
 #include "string.tests.h"
 #include "string.h"
-#include <string.h>
 #include <assert.h>
+#include <string.h>
 
 void string_tests() {
   string s = string_from_cstr("Test");

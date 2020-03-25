@@ -10,10 +10,12 @@ static char *eat_until(char *s, char delim1, char delim2) {
       s++;
     } else if (*s == '\'') {
       s = eat_until(s + 1, '\'', '\0');
-      if (*s) s++;
+      if (*s)
+        s++;
     } else if (*s == '\"') {
       s = eat_until(s + 1, '\"', '\0');
-      if (*s) s++;
+      if (*s)
+        s++;
     } else {
       s++;
     }
@@ -24,8 +26,8 @@ static char *eat_until(char *s, char delim1, char delim2) {
 
 static void add(vector v, char *a, char *b, char *base) {
   if (b - a > 0) {
-    vector_push(v, (any_t) (a - base));
-    vector_push(v, (any_t) (b - 1 - base));
+    vector_push(v, (any_t)(a - base));
+    vector_push(v, (any_t)(b - 1 - base));
   }
 }
 

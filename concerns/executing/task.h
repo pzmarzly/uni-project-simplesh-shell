@@ -1,7 +1,7 @@
 #pragma once
+#include <data_types/redirects.h>
 #include <data_types/string.h>
 #include <data_types/vector.h>
-#include <data_types/redirects.h>
 
 typedef struct task *task;
 task task_new(char *command, vector arguments, redirects redirects);

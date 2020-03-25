@@ -1,15 +1,16 @@
 #include "find_exe.h"
 #include <state/terminal.h>
-#include <unistd.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 
 char *find_exe(char *command) {
   size_t s_command = strlen(command);
 
   char *dirs = getenv("PATH");
   if (!dirs) {
-    printf("%sWarning: PATH not set%s\n", terminal_orange(), terminal_default());
+    printf("%sWarning: PATH not set%s\n", terminal_orange(),
+           terminal_default());
     return NULL;
   }
   // strtok is destructive.
@@ -19,7 +20,8 @@ char *find_exe(char *command) {
   while (dir != NULL) {
     // We need executable permissions
     // to access files in the directory.
-    if (access(dir, X_OK) != 0) continue;
+    if (access(dir, X_OK) != 0)
+      continue;
 
     size_t s_dir = strlen(dir);
     char *path = malloc(s_dir + s_command + 2);

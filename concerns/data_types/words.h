@@ -1,6 +1,6 @@
 #pragma once
-#include "vector.h"
 #include "string.h"
+#include "vector.h"
 
 // words is a vector where each odd element
 // is a starting index and each even element

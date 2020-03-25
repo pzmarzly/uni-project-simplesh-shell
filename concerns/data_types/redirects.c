@@ -1,6 +1,6 @@
 #include "redirects.h"
-#include "vector.h"
 #include "string.h"
+#include "vector.h"
 
 char first_redirect_direction(redirects redirects) {
   return (char)vector_get(redirects, 0);
