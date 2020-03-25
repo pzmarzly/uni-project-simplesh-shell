@@ -2,16 +2,16 @@
 #include <stdbool.h>
 #include <string.h>
 
-static char *eat_until(char *s, char delim) {
-  while (*s && *s != delim) {
+static char *eat_until(char *s, char delim1, char delim2) {
+  while (*s && *s != delim1 && *s != delim2) {
     if (*s == '\\') {
       if (*(s + 1))
         s++;
       s++;
     } else if (*s == '\'') {
-      s = eat_until(s + 1, '\'') + 1;
+      s = eat_until(s + 1, '\'', '\0') + 1;
     } else if (*s == '\"') {
-      s = eat_until(s + 1, '\"') + 1;
+      s = eat_until(s + 1, '\"', '\0') + 1;
     } else {
       s++;
     }
@@ -41,7 +41,7 @@ vector split_into_words(string l) {
   trim(&start);
   vector ret = vector_new();
   while (true) {
-    char *end = eat_until(start, ' ');
+    char *end = eat_until(start, ' ', '\t');
     if (*end) {
       add(ret, start, end, s);
       start = end + 1;
