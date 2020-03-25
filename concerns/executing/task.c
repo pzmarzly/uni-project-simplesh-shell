@@ -1,9 +1,11 @@
 #include "task.h"
 #include "builtins.h"
 #include "find_exe.h"
+#include "enable_redirects.h"
 #include <state/terminal.h>
 #include <stdio.h>
 #include <string.h>
+#include <fcntl.h>
 
 struct task {
   bool is_builtin;
@@ -55,12 +57,7 @@ void task_debug(task task) {
   }
 }
 
-int task_run(task task) {
-  if (!task->exe) {
-    printf("%sCommand not found%s\n", terminal_red(), terminal_default());
-    return 1;
-  }
-
+static char **arguments_to_unix(task task) {
   unsigned ext_arg_len = vector_size(task->arguments);
 
   char **arguments = malloc(sizeof(char *) * (ext_arg_len + 2));
@@ -69,11 +66,44 @@ int task_run(task task) {
     arguments[i + 1] = (char *)vector_get(task->arguments, i);
   arguments[ext_arg_len + 1] = NULL;
 
-  int ret = 1;
+  return arguments;
+}
 
+static void redirects_to_unix(task task, int *stdin_fd, int *stdout_fd, int *stderr_fd) {
+  while (vector_size(task->redirects) > 0) {
+    char direction = first_redirect_direction(task->redirects);
+    if (direction == '>') {
+      // FIXME: check for open(2) errors
+      *stdout_fd = open(first_redirect_path(task->redirects), O_CREAT | O_RDWR);
+      // FIXME: support redirecting stderr separately
+      *stderr_fd = dup(*stdout_fd);
+    } else if (direction == '<') {
+      *stdin_fd = open(first_redirect_path(task->redirects), O_RDONLY);
+    }
+    // FIXME: support multiple redirects (multicasting) or throw error
+    delete_first_redirect(task->redirects);
+  }
+}
+
+int task_run(task task) {
+  if (!task->exe) {
+    printf("%sCommand not found%s\n", terminal_red(), terminal_default());
+    return 1;
+  }
+
+  char **arguments = arguments_to_unix(task);
+
+  int stdin_fd = UNCHANGED;
+  int stdout_fd = UNCHANGED;
+  int stderr_fd = UNCHANGED;
+  redirects_to_unix(task, &stdin_fd, &stdout_fd, &stderr_fd);
+  redirects_state state = enable_redirects(stdin_fd, stdout_fd, stderr_fd);
+
+  int ret = 1;
   if (task->is_builtin)
     ret = run_builtin(task->command, arguments);
 
+  revert_redirects(state);
   free(arguments);
   return ret;
 }
