@@ -12,7 +12,7 @@ static int b_cd(char **args)
   if (path == NULL)
     path = find_home();
   if (chdir(path) != 0) {
-    perror("Cannot cd: ");
+    perror("Cannot cd");
     return 1;
   }
   return 0;
