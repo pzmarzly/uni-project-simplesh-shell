@@ -1,22 +1,26 @@
 #include "task.h"
+#include "find_exe.h"
 #include <stdio.h>
 
 struct task {
-  string command;
+  char *exe;
   vector arguments;
   redirects redirects;
 };
 
 task task_new(string command, vector arguments, redirects redirects) {
   task ret = malloc(sizeof(struct task));
-  ret->command = command;
+  ret->exe = find_exe(command);
   ret->arguments = arguments;
   ret->redirects = redirects;
   return ret;
 }
 
 void task_debug(task task) {
-  printf("Command: %s\n", string_to_cstr(task->command));
+  if (task->exe)
+    printf("Executable: %s\n", task->exe);
+  else
+    printf("Executable not found\n");
 
   vector arguments = vector_clone(task->arguments);
   while (vector_size(arguments) > 0) {
