@@ -7,7 +7,7 @@ struct string {
 };
 
 string string_new() {
-  string v = malloc(sizeof(string));
+  string v = malloc(sizeof(struct string));
   v->chars = vector_new();
   return v;
 }

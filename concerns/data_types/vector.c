@@ -9,7 +9,7 @@ struct vector {
 #define U sizeof(any_t)
 
 vector vector_new() {
-  vector v = malloc(sizeof(vector));
+  vector v = malloc(sizeof(struct vector));
   v->raw = malloc(64 * U);
   v->used = 0;
   v->capacity = 64;
