@@ -77,3 +77,10 @@ int task_run(task task) {
   free(arguments);
   return ret;
 }
+
+void task_free(task task) {
+  free(task->command);
+  vector_free(task->arguments);
+  vector_free(task->redirects);
+  free(task);
+}

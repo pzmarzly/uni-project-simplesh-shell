@@ -54,13 +54,16 @@ static redirects eat_redirects(string line, vector words) {
   return ret;
 }
 
-void process_line(char *line) {
+int process_line(char *line) {
+  int ret = 1;
   string l = string_from_cstr(line);
   expand_globs(l);
 
   words words = split_into_words(l);
-  if (vector_size(words) == 0)
+  if (vector_size(words) == 0) {
+    ret = 0;
     goto end;
+  }
 
   if (!ensure_no_pipes(l, words)) // FIXME: support pipes
     goto end;
@@ -74,9 +77,11 @@ void process_line(char *line) {
 #ifdef DEBUG
   task_debug(task);
 #endif
-  task_run(task);
+  ret = task_run(task);
+  task_free(task);
 
 end:
   vector_free(words);
   string_free(l);
+  return ret;
 }

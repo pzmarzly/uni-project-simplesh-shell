@@ -8,12 +8,12 @@
 
 static bool is_root() { return getuid() == 0; }
 
-char *get_prompt() {
+char *get_prompt(int last_exit_code) {
   char *cwd = get_cwd();
   int cwd_len = strlen(cwd);
 
   char *buf = malloc(cwd_len + 20);
-  strcpy(buf, terminal_green());
+  strcpy(buf, last_exit_code ? terminal_red() : terminal_green());
   strcat(buf, cwd);
   strcat(buf, terminal_default());
   strcat(buf, is_root() ? "# " : "$ ");

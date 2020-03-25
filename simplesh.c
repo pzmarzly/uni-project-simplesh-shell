@@ -7,14 +7,15 @@
 #include <stdlib.h>
 
 int main() {
+  int last_exit_code = 0;
   while (true) {
-    char *prompt = get_prompt();
+    char *prompt = get_prompt(last_exit_code);
     char *line = readline(prompt);
     free(prompt);
 
     if (!line)
       break;
-    process_line(line);
+    last_exit_code = process_line(line);
     free(line);
   }
 
