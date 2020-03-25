@@ -1,4 +1,4 @@
-#include "line_processing.h"
+#include "process_line.h"
 #include "ensure_complete.h"
 #include "ensure_no_pipes.h"
 #include "expand_globs.h"
@@ -8,7 +8,7 @@
 #include <executing/task.h>
 
 static string eat_command_name(vector words) {
-  string ret = vector_get(words, 0);
+  string ret = (string) vector_get(words, 0);
   vector_delete(words, 0);
   return ret;
 }
