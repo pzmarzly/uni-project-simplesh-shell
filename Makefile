@@ -1,6 +1,11 @@
 override CFLAGS+=-std=c11 -xc -Wall -Wextra `pkg-config --cflags readline` -Iconcerns
 override LDFLAGS+=`pkg-config --libs readline`
 
+ifeq ($(DEBUG),1)
+    override CFLAGS+=-fsanitize=address -ggdb
+    override LDFLAGS+=-fsanitize=address -ggdb
+endif
+
 default: all
 all: simplesh
 
