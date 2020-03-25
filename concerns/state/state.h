@@ -8,7 +8,7 @@
 #endif
 
 struct state {
-  char *pwd;
+  char *cwd;
 };
 
 EXTERN struct state *state;

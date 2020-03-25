@@ -1,31 +1,24 @@
 #include "state.h"
+#include "paths.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-static char *find_home() {
-  char *env = getenv("HOME");
-  if (env)
-    return env;
-  printf("Warning: no HOME environment variable set.\n");
-  return strdup("/");
-}
-
 void init_state() {
   state = malloc(sizeof(struct state));
-  state->pwd = find_home();
+  state->cwd = get_cwd();
 }
 
 bool state_is_root() { return getuid() == 0; }
 
 char *state_get_prompt() {
-  int pwd_len = strlen(state->pwd);
-  char *buf = malloc(pwd_len + 3);
-  memcpy(buf, state->pwd, pwd_len);
-  buf[pwd_len] = state_is_root() ? '#' : '$';
-  buf[pwd_len + 1] = ' ';
-  buf[pwd_len + 2] = '\0';
+  int cwd_len = strlen(state->cwd);
+  char *buf = malloc(cwd_len + 3);
+  memcpy(buf, state->cwd, cwd_len);
+  buf[cwd_len] = state_is_root() ? '#' : '$';
+  buf[cwd_len + 1] = ' ';
+  buf[cwd_len + 2] = '\0';
   return buf;
 }
