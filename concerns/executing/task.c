@@ -7,6 +7,7 @@
 
 struct task {
   bool is_builtin;
+  char *command;
   char *exe;
   vector arguments;
   redirects redirects;
@@ -28,6 +29,7 @@ task task_new(char *command, vector arguments, redirects redirects) {
     ret->exe = find_exe(command);
   }
 
+  ret->command = command;
   ret->arguments = arguments;
   ret->redirects = redirects;
   return ret;
@@ -53,11 +55,25 @@ void task_debug(task task) {
   }
 }
 
-void task_run(task task) {
+int task_run(task task) {
   if (!task->exe) {
     printf("%sCommand not found%s\n", terminal_red(), terminal_default());
-    return;
+    return 1;
   }
-  // TODO: implement.
-  (void)task;
+
+  unsigned ext_arg_len = vector_size(task->arguments);
+
+  char **arguments = malloc(sizeof(char *) * (ext_arg_len + 2));
+  arguments[0] = task->command;
+  for (unsigned i = 0; i < ext_arg_len; i++)
+    arguments[i + 1] = (char *)vector_get(task->arguments, i);
+  arguments[ext_arg_len + 1] = NULL;
+
+  int ret = 1;
+
+  if (task->is_builtin)
+    ret = run_builtin(task->command, arguments);
+
+  free(arguments);
+  return ret;
 }
