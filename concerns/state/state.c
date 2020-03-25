@@ -22,9 +22,10 @@ bool state_is_root() { return getuid() == 0; }
 
 char *state_get_prompt() {
   int pwd_len = strlen(state->pwd);
-  char *buf = malloc(pwd_len + 2);
+  char *buf = malloc(pwd_len + 3);
   memcpy(buf, state->pwd, pwd_len);
   buf[pwd_len] = state_is_root() ? '#' : '$';
-  buf[pwd_len + 1] = '\0';
+  buf[pwd_len + 1] = ' ';
+  buf[pwd_len + 2] = '\0';
   return buf;
 }
