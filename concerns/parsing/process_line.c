@@ -10,7 +10,6 @@
 static string eat_command_name(string line, words words) {
   char *word = first_word(words, line);
   string ret = string_from_cstr(word);
-  free(word);
 
   delete_first_word(words);
   return ret;
@@ -21,10 +20,8 @@ static vector eat_arguments(string line, words words) {
   while (vector_size(words) > 0) {
     char *word = first_word(words, line);
     if (word[0] == '>' || word[0] == '<'
-      || word[0] == '|' || word[0] == '&') {
-      free(word);
+      || word[0] == '|' || word[0] == '&')
       break;
-    }
     vector_push(ret, (any_t) word);
     delete_first_word(words);
   }
