@@ -1,10 +1,12 @@
 #include "task.h"
 #include "builtins.h"
 #include "find_exe.h"
+#include "run_exe.h"
 #include "enable_redirects.h"
 #include <state/terminal.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <fcntl.h>
 
 struct task {
@@ -102,6 +104,8 @@ int task_run(task task) {
   int ret = 1;
   if (task->is_builtin)
     ret = run_builtin(task->command, arguments);
+  else
+    ret = run_exe(task->exe, arguments);
 
   revert_redirects(state);
   free(arguments);
