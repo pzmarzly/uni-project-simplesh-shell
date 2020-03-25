@@ -1,5 +1,4 @@
 #include "process_line.h"
-#include "ensure_complete.h"
 #include "ensure_no_pipes.h"
 #include "expand_globs.h"
 #include "split_into_words.h"
@@ -34,14 +33,12 @@ static vector eat_redirects(string line, vector words) {
 
 void process_line(char *line) {
   string l = string_from_cstr(line);
-  if (!ensure_complete(l))
-    return;
-  if (!ensure_no_pipes(l))
-    return;
-
   expand_globs(l);
 
   vector words = split_into_words(l);
+  if (!ensure_no_pipes(l, words)) // FIXME: support pipes
+    goto end;
+
   // eat_variables(words); // FIXME: support setting variables
   string command = eat_command_name(l, words);
   vector arguments = eat_arguments(l, words);
@@ -50,6 +47,7 @@ void process_line(char *line) {
   task task = task_new(command, arguments, redirects);
   task_run(task);
 
+  end:
   vector_free(words);
   string_free(l);
 }

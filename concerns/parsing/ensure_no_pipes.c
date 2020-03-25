@@ -1,14 +1,15 @@
 #include "ensure_no_pipes.h"
 #include <stdio.h>
 
-static bool has_pipes(string l) {
+static bool has_pipes(string line, vector words) {
   // TODO: implement.
-  (void)l;
+  (void)line;
+  (void)words;
   return false;
 }
 
-bool ensure_no_pipes(string l) {
-  if (has_pipes(l)) {
+bool ensure_no_pipes(string line, vector words) {
+  if (has_pipes(line, words)) {
     printf("Error: simplesh does not support output piping.\n");
     return false;
   }
