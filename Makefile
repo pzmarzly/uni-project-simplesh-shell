@@ -1,7 +1,7 @@
 override CFLAGS+=-std=c11 -xc -Wall -Wextra `pkg-config --cflags readline` -Iconcerns
 override LDFLAGS+=`pkg-config --libs readline`
 
-ifeq ($(DEBUG),1)
+ifneq ($(RELEASE),1)
     override CFLAGS+=-fsanitize=address -ggdb
     override LDFLAGS+=-fsanitize=address -ggdb
 endif
@@ -23,7 +23,7 @@ tests: tests.o ${OBJS}
 
 .PHONY: default all fmt clean tests
 test: tests
-	./tests
+	ASAN_OPTIONS=detect_leaks=0 ./tests
 fmt:
 	-clang-format -i *.c || true
 	-clang-format -i *.h || true

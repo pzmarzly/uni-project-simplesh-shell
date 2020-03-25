@@ -22,25 +22,32 @@ static char *eat_until(char *s, char delim) {
 
 static void trim(char **s) {
   // Trim left.
-  while (*s && **s == ' ')
+  while (**s == ' ')
     (*s)++;
   // Trim right.
   // TODO: implement.
 }
 
+static void add(vector v, char *a, char *b, char *s) {
+  if (b - a > 0) {
+    vector_push(v, (any_t) (a - s));
+    vector_push(v, (any_t) (b - 1 - s));
+  }
+}
+
 vector split_into_words(string l) {
-  char *start = string_to_cstr(l);
+  char *s = string_to_cstr(l);
+  char *start = s;
   trim(&start);
   vector ret = vector_new();
   while (true) {
     char *end = eat_until(start, ' ');
-    if (end) {
-      vector_push(ret, (any_t) start);
-      vector_push(ret, (any_t) end - 1);
+    if (*end) {
+      add(ret, start, end, s);
       start = end + 1;
     } else {
-      vector_push(ret, (any_t) start);
-      vector_push(ret, (any_t) start + strlen(start));
+      add(ret, start, start + strlen(start), s);
+      free(s);
       return ret;
     }
   }
