@@ -50,4 +50,8 @@ void split_into_words_tests() {
   assert(vector_size(x7) == 2);
   assert(vector_get(x7, 0) == 1);
   assert(vector_get(x7, 1) == 11);
+
+  string s8 = string_from_cstr(" \"make test ");
+  vector x8 = split_into_words(s8);
+  assert(vector_get(x8, 0) == 1);
 }
