@@ -1,9 +1,27 @@
 #include "line_processing.h"
 #include "ensure_complete.h"
 #include "ensure_no_pipes.h"
+#include "split_into_words.h"
+#include "expand_globs.h"
 #include <data_types/string.h>
 #include <data_types/vector.h>
 #include <executing/task.h>
+
+static string eat_command_name(vector words) {
+  string ret = vector_get(words, 0);
+  vector_delete(words, 0);
+  return ret;
+}
+
+static vector eat_arguments(vector words) {
+  // TODO: implement.
+  return words;
+}
+
+static vector eat_redirects(vector words) {
+  // TODO: implement.
+  return words;
+}
 
 void process_line(char *line) {
   string l = string_from_cstr(line);
