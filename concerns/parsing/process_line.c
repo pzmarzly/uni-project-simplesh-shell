@@ -4,25 +4,25 @@
 #include "split_into_words.h"
 #include <data_types/string.h>
 #include <data_types/vector.h>
+#include <data_types/words.h>
 #include <executing/task.h>
 
-static string eat_command_name(string line, vector words) {
-  size_t a = (size_t) vector_get(words, 0);
-  size_t b = (size_t) vector_get(words, 1);
-  vector_delete_range(words, 0, 1);
+static string eat_command_name(string line, words words) {
+  char *word = first_word(words, line);
+  string ret = string_from_cstr(word);
+  free(word);
 
-  char *s = string_to_cstr(line);
-  s[b] = '\0';
-  string ret = string_from_cstr(s + a);
-  free(s);
-
+  delete_first_word(words);
   return ret;
 }
 
-static vector eat_arguments(string line, vector words) {
-  // TODO: implement.
-  (void)line;
-  return words;
+static vector eat_arguments(string line, words words) {
+  vector ret = vector_new();
+  while (vector_size(words) > 0) {
+    char *word = first_word(words, line);
+    free(word);
+  }
+  return ret;
 }
 
 static vector eat_redirects(string line, vector words) {

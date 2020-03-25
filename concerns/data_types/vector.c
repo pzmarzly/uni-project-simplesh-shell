@@ -36,13 +36,13 @@ void vector_set(vector v, unsigned index, any_t el) {
 any_t vector_get(vector v, unsigned index) { return v->raw[index]; }
 
 void vector_delete(vector v, unsigned index) {
-  vector_delete_range(v, index, index + 1);
+  vector_delete_range(v, index, index);
 }
 
 void vector_delete_range(vector v, unsigned start, unsigned end) {
-  unsigned diff = end - start;
+  unsigned diff = end - start + 1;
   // shift left
-  for (unsigned idx = start; idx < end; idx++) {
+  for (unsigned idx = start; idx <= end; idx++) {
     if (idx + diff < v->used) {
       v->raw[idx] = v->raw[idx + diff];
     }
