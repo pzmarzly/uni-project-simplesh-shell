@@ -20,35 +20,27 @@ static char *eat_until(char *s, char delim1, char delim2) {
   return s;
 }
 
-static void trim(char **s) {
-  // Trim left.
-  while (**s == ' ')
-    (*s)++;
-  // Trim right.
-  // TODO: implement.
-}
-
-static void add(vector v, char *a, char *b, char *s) {
+static void add(vector v, char *a, char *b, char *base) {
   if (b - a > 0) {
-    vector_push(v, (any_t) (a - s));
-    vector_push(v, (any_t) (b - 1 - s));
+    vector_push(v, (any_t) (a - base));
+    vector_push(v, (any_t) (b - 1 - base));
   }
 }
 
 vector split_into_words(string l) {
-  char *s = string_to_cstr(l);
-  char *start = s;
-  trim(&start);
+  char *base = string_to_cstr(l);
   vector ret = vector_new();
+  char *start = base;
   while (true) {
     char *end = eat_until(start, ' ', '\t');
     if (*end) {
-      add(ret, start, end, s);
+      add(ret, start, end, base);
       start = end + 1;
     } else {
-      add(ret, start, start + strlen(start), s);
-      free(s);
-      return ret;
+      add(ret, start, start + strlen(start), base);
+      break;
     }
   }
+  free(base);
+  return ret;
 }
