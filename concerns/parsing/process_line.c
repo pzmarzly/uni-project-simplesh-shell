@@ -9,12 +9,10 @@
 #include <executing/task.h>
 #include <string.h>
 
-static string eat_command_name(string line, words words) {
+static char *eat_command_name(string line, words words) {
   char *word = first_word(words, line);
-  string ret = string_from_cstr(word);
-
   delete_first_word(words);
-  return ret;
+  return word;
 }
 
 static vector eat_arguments(string line, words words) {
@@ -69,7 +67,7 @@ void process_line(char *line) {
     goto end;
 
   // eat_variables(words); // FIXME: support setting variables
-  string command = eat_command_name(l, words);
+  char *command = eat_command_name(l, words);
   vector arguments = eat_arguments(l, words);
   redirects redirects = eat_redirects(l, words);
 

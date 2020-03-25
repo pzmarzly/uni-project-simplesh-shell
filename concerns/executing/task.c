@@ -1,16 +1,34 @@
 #include "task.h"
 #include "find_exe.h"
+#include "builtins.h"
 #include <stdio.h>
+#include <string.h>
 
 struct task {
+  bool is_builtin;
   char *exe;
   vector arguments;
   redirects redirects;
 };
 
-task task_new(string command, vector arguments, redirects redirects) {
+static bool is_path(char* command) {
+  return strchr(command, '/') != NULL;
+}
+
+task task_new(char *command, vector arguments, redirects redirects) {
   task ret = malloc(sizeof(struct task));
-  ret->exe = find_exe(command);
+
+  if (is_path(command)) {
+    ret->is_builtin = false;
+    ret->exe = command;
+  } else if (is_builtin(command)) {
+    ret->is_builtin = true;
+    ret->exe = command;
+  } else {
+    ret->is_builtin = false;
+    ret->exe = find_exe(command);
+  }
+
   ret->arguments = arguments;
   ret->redirects = redirects;
   return ret;
@@ -36,6 +54,10 @@ void task_debug(task task) {
 }
 
 void task_run(task task) {
+  if (!task->exe) {
+    printf("Command not found\n");
+    return;
+  }
   // TODO: implement.
   (void)task;
 }
