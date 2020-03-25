@@ -9,9 +9,9 @@ static char *eat_until(char *s, char delim) {
         s++;
       s++;
     } else if (*s == '\'') {
-      s = eat_until(s, '\'');
+      s = eat_until(s + 1, '\'') + 1;
     } else if (*s == '\"') {
-      s = eat_until(s, '\"');
+      s = eat_until(s + 1, '\"') + 1;
     } else {
       s++;
     }
