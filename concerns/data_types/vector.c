@@ -41,8 +41,9 @@ void vector_delete(vector v, unsigned index) {
 
 void vector_delete_range(vector v, unsigned start, unsigned end) {
   unsigned diff = end - start + 1;
+  unsigned size = v->capacity;
   // shift left
-  for (unsigned idx = start; idx <= end; idx++) {
+  for (unsigned idx = start; idx < size; idx++) {
     if (idx + diff < v->used) {
       v->raw[idx] = v->raw[idx + diff];
     }
