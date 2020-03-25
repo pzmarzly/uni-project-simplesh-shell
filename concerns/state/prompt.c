@@ -17,5 +17,7 @@ char *get_prompt() {
   strcat(buf, cwd);
   strcat(buf, terminal_default());
   strcat(buf, is_root() ? "# " : "$ ");
+
+  free(cwd);
   return buf;
 }

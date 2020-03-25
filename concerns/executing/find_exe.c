@@ -1,4 +1,5 @@
 #include "find_exe.h"
+#include <state/terminal.h>
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
@@ -8,7 +9,7 @@ char *find_exe(char *command) {
 
   char *dirs = getenv("PATH");
   if (!dirs) {
-    printf("Warning: PATH not set\n");
+    printf("%sWarning: PATH not set%s\n", terminal_orange(), terminal_default());
     return NULL;
   }
   // strtok is destructive.

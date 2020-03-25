@@ -1,6 +1,7 @@
 #include "task.h"
 #include "find_exe.h"
 #include "builtins.h"
+#include <state/terminal.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -55,7 +56,7 @@ void task_debug(task task) {
 
 void task_run(task task) {
   if (!task->exe) {
-    printf("Command not found\n");
+    printf("%sCommand not found%s\n", terminal_red(), terminal_default());
     return;
   }
   // TODO: implement.

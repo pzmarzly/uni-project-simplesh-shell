@@ -10,7 +10,7 @@ static bool has_pipes(string line, vector words) {
 
 bool ensure_no_pipes(string line, vector words) {
   if (has_pipes(line, words)) {
-    printf("Error: simplesh does not support output piping.\n");
+    printf("simplesh does not support output piping.\n");
     return false;
   }
   return true;

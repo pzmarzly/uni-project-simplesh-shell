@@ -1,3 +1,4 @@
+#include <state/terminal.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -10,6 +11,6 @@ int main() {
   split_into_words_tests();
   words_tests();
 
-  printf("OK\n");
+  printf("%sOK%s\n", terminal_green(), terminal_default());
   return 0;
 }

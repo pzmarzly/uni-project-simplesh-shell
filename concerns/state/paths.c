@@ -1,4 +1,5 @@
 #include "paths.h"
+#include "terminal.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +9,7 @@ char *find_home() {
   char *env = getenv("HOME");
   if (env)
     return env;
-  printf("Warning: no HOME environment variable set.\n");
+  printf("%sWarning: HOME not set%s\n", terminal_orange(), terminal_default());
   return strdup("/");
 }
 
