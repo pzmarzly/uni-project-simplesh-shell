@@ -25,7 +25,7 @@ static vector eat_arguments(string line, words words) {
       free(word);
       break;
     }
-    vector_push(ret, word);
+    vector_push(ret, (any_t) word);
     delete_first_word(words);
   }
   return ret;
@@ -43,6 +43,9 @@ void process_line(char *line) {
   expand_globs(l);
 
   vector words = split_into_words(l);
+  if (vector_size(words) == 0)
+    goto end;
+
   if (!ensure_no_pipes(l, words)) // FIXME: support pipes
     goto end;
 
