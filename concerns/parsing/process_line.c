@@ -20,7 +20,13 @@ static vector eat_arguments(string line, words words) {
   vector ret = vector_new();
   while (vector_size(words) > 0) {
     char *word = first_word(words, line);
-    free(word);
+    if (word[0] == '>' || word[0] == '<'
+      || word[0] == '|' || word[0] == '&') {
+      free(word);
+      break;
+    }
+    vector_push(ret, word);
+    delete_first_word(words);
   }
   return ret;
 }
@@ -28,7 +34,8 @@ static vector eat_arguments(string line, words words) {
 static vector eat_redirects(string line, vector words) {
   // TODO: implement.
   (void)line;
-  return words;
+  (void)words;
+  return vector_new();
 }
 
 void process_line(char *line) {
