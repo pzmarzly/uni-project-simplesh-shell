@@ -74,6 +74,9 @@ void process_line(char *line) {
   redirects redirects = eat_redirects(l, words);
 
   task task = task_new(command, arguments, redirects);
+  #ifdef DEBUG
+  task_debug(task);
+  #endif
   task_run(task);
 
   end:

@@ -2,7 +2,7 @@ override CFLAGS+=-std=c11 -xc -Wall -Wextra `pkg-config --cflags readline` -Icon
 override LDFLAGS+=`pkg-config --libs readline`
 
 ifneq ($(RELEASE),1)
-    override CFLAGS+=-fsanitize=address -ggdb
+    override CFLAGS+=-fsanitize=address -ggdb -DDEBUG
     override LDFLAGS+=-fsanitize=address -ggdb
 endif
 

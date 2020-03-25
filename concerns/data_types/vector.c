@@ -1,4 +1,5 @@
 #include "vector.h"
+#include <string.h>
 
 struct vector {
   any_t *raw;
@@ -17,6 +18,15 @@ vector vector_new() {
 }
 
 size_t vector_size(vector v) { return v->used; }
+
+vector vector_clone(vector v) {
+  vector v2 = malloc(sizeof(struct vector));
+  v2->raw = malloc(v->capacity * U);
+  v2->used = v->used;
+  v2->capacity = v->capacity;
+  memcpy(v2->raw, v->raw, v->capacity * U);
+  return v2;
+}
 
 static void resize(vector v) {
   v->raw = realloc(v->raw, v->capacity * 2);
