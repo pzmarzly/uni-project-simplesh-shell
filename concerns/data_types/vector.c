@@ -11,9 +11,9 @@ struct vector {
 
 vector vector_new() {
   vector v = malloc(sizeof(struct vector));
-  v->raw = malloc(64 * U);
+  v->raw = malloc(8 * U);
   v->used = 0;
-  v->capacity = 64;
+  v->capacity = 8;
   return v;
 }
 
@@ -29,7 +29,7 @@ vector vector_clone(vector v) {
 }
 
 static void resize(vector v) {
-  v->raw = realloc(v->raw, v->capacity * 2);
+  v->raw = realloc(v->raw, v->capacity * 2 * U);
   v->capacity *= 2;
 }
 
