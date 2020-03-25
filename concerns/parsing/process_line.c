@@ -5,7 +5,9 @@
 #include <data_types/string.h>
 #include <data_types/vector.h>
 #include <data_types/words.h>
+#include <data_types/redirects.h>
 #include <executing/task.h>
+#include <string.h>
 
 static string eat_command_name(string line, words words) {
   char *word = first_word(words, line);
@@ -20,7 +22,7 @@ static vector eat_arguments(string line, words words) {
   while (vector_size(words) > 0) {
     char *word = first_word(words, line);
     if (word[0] == '>' || word[0] == '<'
-      || word[0] == '|' || word[0] == '&')
+      || word[0] == '|')
       break;
     vector_push(ret, (any_t) word);
     delete_first_word(words);
@@ -28,18 +30,38 @@ static vector eat_arguments(string line, words words) {
   return ret;
 }
 
-static vector eat_redirects(string line, vector words) {
-  // TODO: implement.
-  (void)line;
-  (void)words;
-  return vector_new();
+static redirects eat_redirects(string line, vector words) {
+  vector ret = vector_new();
+  char last_seen = '\0';
+  while (vector_size(words) > 0) {
+    char *word = first_word(words, line);
+    if (word[0] == '|')
+      break;
+
+    if (strlen(word) == 1 && (word[0] == '>' || word[0] == '<')) {
+      last_seen = word[0];
+      delete_first_word(words);
+      continue;
+    }
+
+    if (last_seen) {
+      vector_push(ret, (any_t) last_seen);
+      vector_push(ret, (any_t) word);
+    } else if (word[0] == '>' || word[0] == '<') {
+      vector_push(ret, (any_t) word[0]);
+      vector_push(ret, (any_t) (word + 1));
+    }
+
+    delete_first_word(words);
+  }
+  return ret;
 }
 
 void process_line(char *line) {
   string l = string_from_cstr(line);
   expand_globs(l);
 
-  vector words = split_into_words(l);
+  words words = split_into_words(l);
   if (vector_size(words) == 0)
     goto end;
 
@@ -49,7 +71,7 @@ void process_line(char *line) {
   // eat_variables(words); // FIXME: support setting variables
   string command = eat_command_name(l, words);
   vector arguments = eat_arguments(l, words);
-  vector redirects = eat_redirects(l, words);
+  redirects redirects = eat_redirects(l, words);
 
   task task = task_new(command, arguments, redirects);
   task_run(task);
