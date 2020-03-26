@@ -2,7 +2,12 @@
 #include <stdio.h>
 #include <unistd.h>
 
-bool can_colorize() { return isatty(fileno(stdin)); }
+bool can_colorize() {
+  static int can_colorize = 2;
+  if (can_colorize == 2)
+    can_colorize = isatty(fileno(stdin));
+  return can_colorize;
+}
 
 char *terminal_green() { return can_colorize() ? "\033[0;32m" : ""; }
 
