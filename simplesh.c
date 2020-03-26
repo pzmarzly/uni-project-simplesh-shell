@@ -5,8 +5,26 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
+
+int clean_on_sigint() {
+  rl_reset_after_signal();
+  rl_replace_line("", 0);
+  rl_reset_line_state();
+  rl_crlf();
+  rl_redisplay();
+  return 0;
+}
+
+void ignore(int signal) {
+  (void)signal;
+}
 
 int main() {
+  signal(SIGINT, ignore);
+  rl_signal_event_hook = clean_on_sigint;
+
   int last_exit_code = 0;
   while (true) {
     char *prompt = get_prompt(last_exit_code);
@@ -34,5 +52,6 @@ int main() {
     free(line);
   }
 
+  printf("\n");
   return 0;
 }
