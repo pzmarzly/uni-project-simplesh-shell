@@ -144,13 +144,13 @@ void task_free(task task) {
     free(task->command);
   free(task->exe);
 
-  size_t args = vector_size(task->arguments);
-  for (size_t i = 0; i < args; i++)
+  unsigned args = vector_size(task->arguments);
+  for (unsigned i = 0; i < args; i++)
     free((char *)vector_get(task->arguments, i));
   vector_free(task->arguments);
 
-  size_t redirs = vector_size(task->redirects);
-  for (size_t i = 0; i < redirs; i += 2)
+  unsigned redirs = vector_size(task->redirects);
+  for (unsigned i = 0; i < redirs; i += 2)
     free((char *)vector_get(task->redirects, i));
   vector_free(task->redirects);
 

@@ -3,8 +3,8 @@
 
 struct vector {
   any_t *raw;
-  size_t used;
-  size_t capacity;
+  unsigned used;
+  unsigned capacity;
 };
 
 #define U sizeof(any_t)
@@ -17,7 +17,7 @@ vector vector_new() {
   return v;
 }
 
-size_t vector_size(vector v) { return v->used; }
+unsigned vector_size(vector v) { return v->used; }
 
 vector vector_clone(vector v) {
   vector v2 = malloc(sizeof(struct vector));

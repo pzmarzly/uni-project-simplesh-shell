@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 char *find_exe(char *command) {
-  size_t s_command = strlen(command);
+  unsigned s_command = strlen(command);
 
   char *dirs = getenv("PATH");
   if (!dirs) {
@@ -24,7 +24,7 @@ char *find_exe(char *command) {
     if (access(dir, X_OK) != 0)
       continue;
 
-    size_t s_dir = strlen(dir);
+    unsigned s_dir = strlen(dir);
     char *path = malloc(s_dir + s_command + 2);
     memcpy(path, dir, s_dir);
     path[s_dir] = '/';

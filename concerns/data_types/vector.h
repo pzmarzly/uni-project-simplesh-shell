@@ -5,7 +5,7 @@ typedef unsigned long long any_t;
 typedef struct vector *vector;
 
 vector vector_new();
-size_t vector_size(vector v);
+unsigned vector_size(vector v);
 vector vector_clone(vector v);
 void vector_push(vector v, any_t el);
 void vector_set(vector v, unsigned index, any_t el);
