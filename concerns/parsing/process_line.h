@@ -1,3 +1,7 @@
 #pragma once
+#include <executing/task.h>
 
-int process_line(char *line);
+#define PARSE_OK 0
+#define PARSE_EMPTY 1
+#define PARSE_ERROR 2
+int process_line(char *line, task* output);

@@ -15,7 +15,22 @@ int main() {
 
     if (!line)
       break;
-    last_exit_code = process_line(line);
+
+    task task;
+    int status = process_line(line, &task);
+    if (status == PARSE_OK) {
+      add_history(line);
+#ifdef DEBUG
+      task_debug(task);
+#endif
+      last_exit_code = task_run(task);
+      task_free(task);
+    } else if (status == PARSE_EMPTY) {
+      last_exit_code = 0;
+    } else if (status == PARSE_ERROR) {
+      last_exit_code = 1;
+    }
+
     free(line);
   }
 

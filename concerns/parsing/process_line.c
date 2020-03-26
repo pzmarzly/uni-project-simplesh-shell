@@ -54,14 +54,14 @@ static redirects eat_redirects(string line, vector words) {
   return ret;
 }
 
-int process_line(char *line) {
-  int ret = 1;
+int process_line(char *line, task *output) {
+  int ret = PARSE_ERROR;
   string l = string_from_cstr(line);
   expand_globs(l);
 
   words words = split_into_words(l);
   if (vector_size(words) == 0) {
-    ret = 0;
+    ret = PARSE_EMPTY;
     goto end;
   }
 
@@ -73,12 +73,8 @@ int process_line(char *line) {
   vector arguments = eat_arguments(l, words);
   redirects redirects = eat_redirects(l, words);
 
-  task task = task_new(command, arguments, redirects);
-#ifdef DEBUG
-  task_debug(task);
-#endif
-  ret = task_run(task);
-  task_free(task);
+  *output = task_new(command, arguments, redirects);
+  ret = PARSE_OK;
 
 end:
   vector_free(words);
