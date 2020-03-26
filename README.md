@@ -14,3 +14,5 @@ Features:
 Caveats:
 
 - quoted strings are not concatenated, that is `"a""b"` will be interpreted as `"a\"\"b"`
+
+Licensed MIT.
