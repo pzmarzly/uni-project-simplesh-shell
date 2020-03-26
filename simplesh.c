@@ -46,6 +46,7 @@ int main() {
     } else if (status == PARSE_EMPTY) {
       last_exit_code = 0;
     } else if (status == PARSE_ERROR) {
+      add_history(line);
       last_exit_code = 1;
     }
     free(line);
