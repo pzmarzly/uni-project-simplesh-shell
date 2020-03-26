@@ -76,13 +76,14 @@ static void redirects_to_unix(task task, int *stdin_fd, int *stdout_fd, int *std
     char direction = first_redirect_direction(task->redirects);
     if (direction == '>') {
       // FIXME: check for open(2) errors
-      *stdout_fd = open(first_redirect_path(task->redirects), O_CREAT | O_RDWR);
+      int fd = open(first_redirect_path(task->redirects), O_CREAT | O_WRONLY | O_TRUNC);
+      *stdout_fd = fd;
       // FIXME: support redirecting stderr separately
       *stderr_fd = dup(*stdout_fd);
     } else if (direction == '<') {
       *stdin_fd = open(first_redirect_path(task->redirects), O_RDONLY);
     }
-    // FIXME: support multiple redirects (multicasting) or throw error
+    // FIXME: support multiple redirects (multicasting) or at least throw error
     delete_first_redirect(task->redirects);
   }
 }
