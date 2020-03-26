@@ -49,6 +49,7 @@ void task_debug(task task) {
     printf("Argument: %s\n", (char *)vector_get(arguments, 0));
     vector_delete(arguments, 0);
   }
+  vector_free(arguments);
 
   vector redirects = vector_clone(task->redirects);
   while (vector_size(redirects) > 0) {
@@ -56,6 +57,7 @@ void task_debug(task task) {
            first_redirect_path(redirects));
     delete_first_redirect(redirects);
   }
+  vector_free(redirects);
 }
 
 static char **arguments_to_unix(task task) {
@@ -138,7 +140,9 @@ int task_run(task task) {
 }
 
 void task_free(task task) {
-  free(task->command);
+  if (task->command != task->exe)
+    free(task->command);
+  free(task->exe);
 
   size_t args = vector_size(task->arguments);
   for (size_t i = 0; i < args; i++)

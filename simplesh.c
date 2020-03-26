@@ -48,6 +48,7 @@ int main() {
     } else if (status == PARSE_ERROR) {
       last_exit_code = 1;
     }
+    free(line);
   }
 
   printf("\n");
