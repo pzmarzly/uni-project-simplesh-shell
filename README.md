@@ -15,4 +15,4 @@ Caveats:
 
 - quoted strings are not concatenated, that is `"a""b"` will be interpreted as `"a\"\"b"`
 
-Licensed MIT.
+Licensed MIT. Written in a week as a solution for a [Linux system administration course](https://zapisy.ii.uni.wroc.pl/offer/937_kurs-administrowania-linuksem/) homework.
