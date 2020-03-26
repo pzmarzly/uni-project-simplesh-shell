@@ -35,7 +35,7 @@ static int b_export(char **args)
     fprintf(stderr, "Only 1 variable at a time can be set\n");
     return 1;
   }
-  if (putenv(var) != 0) {
+  if (putenv(strdup(var)) != 0) {
     perror("Cannot putenv");
     return 1;
   }
