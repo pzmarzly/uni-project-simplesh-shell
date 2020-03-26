@@ -3,19 +3,18 @@
 #include "expand_globs.h"
 #include "split_into_words.h"
 #include <data_types/redirects.h>
-#include <data_types/string.h>
 #include <data_types/vector.h>
 #include <data_types/words.h>
 #include <executing/task.h>
 #include <string.h>
 
-static char *eat_command_name(string line, words words) {
+static char *eat_command_name(char *line, words words) {
   char *word = first_word(words, line);
   delete_first_word(words);
   return word;
 }
 
-static vector eat_arguments(string line, words words) {
+static vector eat_arguments(char *line, words words) {
   vector ret = vector_new();
   while (vector_size(words) > 0) {
     char *word = first_word(words, line);
@@ -27,7 +26,7 @@ static vector eat_arguments(string line, words words) {
   return ret;
 }
 
-static redirects eat_redirects(string line, vector words) {
+static redirects eat_redirects(char *line, vector words) {
   vector ret = vector_new();
   char last_seen = '\0';
   while (vector_size(words) > 0) {
@@ -65,8 +64,8 @@ static redirects eat_redirects(string line, vector words) {
 
 int parse_line(char *line, task *output) {
   int ret = PARSE_ERROR;
-  string l = string_from_cstr(line);
-  expand_globs(l);
+  char *l = strdup(line);
+  expand_globs(&l);
 
   words words = split_into_words(l);
   if (vector_size(words) == 0) {
@@ -87,6 +86,6 @@ int parse_line(char *line, task *output) {
 
 end:
   vector_free(words);
-  string_free(l);
+  free(l);
   return ret;
 }

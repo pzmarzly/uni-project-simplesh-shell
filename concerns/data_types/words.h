@@ -6,5 +6,5 @@
 // is a starting index and each even element
 // in a corresponding ending one.
 typedef struct vector *words;
-char *first_word(words words, string line);
+char *first_word(words words, char *line);
 void delete_first_word(words words);

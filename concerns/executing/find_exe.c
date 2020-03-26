@@ -1,5 +1,6 @@
 #include "find_exe.h"
 #include <state/terminal.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>

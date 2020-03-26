@@ -36,21 +36,19 @@ static void add(vector v, char *a, char *b, char *base) {
   }
 }
 
-vector split_into_words(string l) {
-  char *base = string_to_cstr(l);
+vector split_into_words(char *line) {
   vector ret = vector_new();
-  char *start = base;
+  char *start = line;
   while (true) {
     char *end = eat_until(start, ' ', '\t');
     // Is there anything more in the line?
     if (*end) {
-      add(ret, start, end, base);
+      add(ret, start, end, line);
       start = end + 1;
     } else {
-      add(ret, start, start + strlen(start), base);
+      add(ret, start, start + strlen(start), line);
       break;
     }
   }
-  free(base);
   return ret;
 }

@@ -2,10 +2,10 @@
 #include "string.h"
 #include "vector.h"
 
-char *first_word(words words, string line) {
+char *first_word(words words, char *line) {
   size_t a = (size_t)vector_get(words, 0);
   size_t b = (size_t)vector_get(words, 1);
-  char *s = string_to_cstr(line);
+  char *s = strdup(line);
   s[b + 1] = '\0';
   return s + a;
 }

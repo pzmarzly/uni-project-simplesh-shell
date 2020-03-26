@@ -5,7 +5,7 @@
 #include <string.h>
 
 void words_tests() {
-  string line = string_from_cstr("  make  test");
+  char *line = "  make  test";
   vector words = split_into_words(line);
 
   assert(strcmp(first_word(words, line), "make") == 0);

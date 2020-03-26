@@ -1,7 +1,7 @@
 #include "expand_globs.h"
 
-void expand_globs(string l) {
+void expand_globs(char **line) {
   // TODO: implement.
-  (void)l;
-  // vector words = split_into_words(l);
+  (void)line;
+  // words words = split_into_words(line);
 }
