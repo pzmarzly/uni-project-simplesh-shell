@@ -2,7 +2,6 @@
 #include "builtins.h"
 #include "find_exe.h"
 #include "run_exe.h"
-#include "enable_redirects.h"
 #include <state/terminal.h>
 #include <stdio.h>
 #include <string.h>
@@ -71,19 +70,38 @@ static char **arguments_to_unix(task task) {
   return arguments;
 }
 
-static void redirects_to_unix(task task, int *stdin_fd, int *stdout_fd, int *stderr_fd) {
+static void enable_redirects(task task) {
   while (vector_size(task->redirects) > 0) {
     char direction = first_redirect_direction(task->redirects);
+
+    // FIXME: support multiplexing (tee).
+    // dup2 clones the handle, so we can close the original.
     if (direction == '>') {
-      // FIXME: check for open(2) errors
       int fd = open(first_redirect_path(task->redirects), O_CREAT | O_WRONLY | O_TRUNC);
-      *stdout_fd = fd;
-      // FIXME: support redirecting stderr separately
-      *stderr_fd = dup(*stdout_fd);
+      if (fd == -1) {
+        perror("open");
+      } else {
+        dup2(fd, STDOUT_FILENO);
+        close(fd);
+      }
+    } else if (direction == '2') {
+      int fd = open(first_redirect_path(task->redirects), O_CREAT | O_WRONLY | O_TRUNC);
+      if (fd == -1) {
+        perror("open");
+      } else {
+        dup2(fd, STDERR_FILENO);
+        close(fd);
+      }
     } else if (direction == '<') {
-      *stdin_fd = open(first_redirect_path(task->redirects), O_RDONLY);
+      int fd = open(first_redirect_path(task->redirects), O_RDONLY);
+      if (fd == -1) {
+        perror("open");
+      } else {
+        dup2(fd, STDIN_FILENO);
+        close(fd);
+      }
     }
-    // FIXME: support multiple redirects (multicasting) or at least throw error
+
     delete_first_redirect(task->redirects);
   }
 }
@@ -96,11 +114,11 @@ int task_run(task task) {
 
   char **arguments = arguments_to_unix(task);
 
-  int stdin_fd = UNCHANGED;
-  int stdout_fd = UNCHANGED;
-  int stderr_fd = UNCHANGED;
-  redirects_to_unix(task, &stdin_fd, &stdout_fd, &stderr_fd);
-  redirects_state state = enable_redirects(stdin_fd, stdout_fd, stderr_fd);
+  // Create copies of IO handles.
+  int stdin_fd = dup(STDIN_FILENO);
+  int stdout_fd = dup(STDIN_FILENO);
+  int stderr_fd = dup(STDIN_FILENO);
+  enable_redirects(task);
 
   int ret = 1;
   if (task->is_builtin)
@@ -108,7 +126,13 @@ int task_run(task task) {
   else
     ret = run_exe(task->exe, arguments);
 
-  revert_redirects(state);
+  // Restore IO. dup2 will close whatever has fd=STDIN_FILENO,
+  // duplicate stdin_fd and put the copy in place
+  // of STDOUT_FILENO.
+  dup2(stdin_fd, STDIN_FILENO);
+  dup2(stdout_fd, STDOUT_FILENO);
+  dup2(stderr_fd, STDERR_FILENO);
+
   free(arguments);
   return ret;
 }

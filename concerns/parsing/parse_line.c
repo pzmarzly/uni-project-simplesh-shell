@@ -40,13 +40,22 @@ static redirects eat_redirects(string line, vector words) {
       delete_first_word(words);
       continue;
     }
+    if (strlen(word) == 2 && word[0] == '2' && word[1] == '>') {
+      last_seen = word[0];
+      delete_first_word(words);
+      continue;
+    }
 
     if (last_seen) {
       vector_push(ret, (any_t)last_seen);
       vector_push(ret, (any_t)word);
+      last_seen = '\0';
     } else if (word[0] == '>' || word[0] == '<') {
       vector_push(ret, (any_t)word[0]);
       vector_push(ret, (any_t)(word + 1));
+    } else if (word[0] == '2' && word[1] == '>') {
+      vector_push(ret, (any_t)word[0]);
+      vector_push(ret, (any_t)(word + 2));
     }
 
     delete_first_word(words);
