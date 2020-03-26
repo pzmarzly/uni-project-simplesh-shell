@@ -48,8 +48,8 @@ void split_into_words_tests() {
   string s7 = string_from_cstr(" \"make test\" ");
   vector x7 = split_into_words(s7);
   assert(vector_size(x7) == 2);
-  assert(vector_get(x7, 0) == 1);
-  assert(vector_get(x7, 1) == 11);
+  assert(vector_get(x7, 0) == 2);
+  assert(vector_get(x7, 1) == 10);
 
   string s8 = string_from_cstr(" \"make test ");
   vector x8 = split_into_words(s8);

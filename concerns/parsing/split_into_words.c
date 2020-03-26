@@ -25,7 +25,12 @@ static char *eat_until(char *s, char delim1, char delim2) {
 }
 
 static void add(vector v, char *a, char *b, char *base) {
+  // Don't add empty words.
   if (b - a > 0) {
+    // If quoted, remove quotes.
+    if ((*a == '\"' && *(b - 1) == '\"') || (*a == '\'' && *(b - 1) == '\'')) {
+      a++; b--;
+    }
     vector_push(v, (any_t)(a - base));
     vector_push(v, (any_t)(b - 1 - base));
   }
@@ -37,6 +42,7 @@ vector split_into_words(string l) {
   char *start = base;
   while (true) {
     char *end = eat_until(start, ' ', '\t');
+    // Is there anything more in the line?
     if (*end) {
       add(ret, start, end, base);
       start = end + 1;
