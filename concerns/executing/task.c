@@ -77,6 +77,7 @@ static void enable_redirects(task task) {
     char direction = first_redirect_direction(task->redirects);
 
     // FIXME: support multiplexing (tee).
+    // FIXME: support redirects to fd (2>&1).
     // dup2 clones the handle, so we can close the original.
     if (direction == '>') {
       int fd = open(first_redirect_path(task->redirects), O_CREAT | O_WRONLY | O_TRUNC);
@@ -86,6 +87,7 @@ static void enable_redirects(task task) {
         dup2(fd, STDOUT_FILENO);
         close(fd);
       }
+      free(first_redirect_path(task->redirects) - 1);
     } else if (direction == '2') {
       int fd = open(first_redirect_path(task->redirects), O_CREAT | O_WRONLY | O_TRUNC);
       if (fd == -1) {
@@ -94,6 +96,7 @@ static void enable_redirects(task task) {
         dup2(fd, STDERR_FILENO);
         close(fd);
       }
+      free(first_redirect_path(task->redirects) - 2);
     } else if (direction == '<') {
       int fd = open(first_redirect_path(task->redirects), O_RDONLY);
       if (fd == -1) {
@@ -102,6 +105,7 @@ static void enable_redirects(task task) {
         dup2(fd, STDIN_FILENO);
         close(fd);
       }
+      free(first_redirect_path(task->redirects) - 1);
     }
 
     delete_first_redirect(task->redirects);
@@ -149,9 +153,6 @@ void task_free(task task) {
     free((char *)vector_get(task->arguments, i));
   vector_free(task->arguments);
 
-  unsigned redirs = vector_size(task->redirects);
-  for (unsigned i = 0; i < redirs; i += 2)
-    free((char *)vector_get(task->redirects, i));
   vector_free(task->redirects);
 
   free(task);
