@@ -24,14 +24,34 @@ static _Noreturn int b_exit(char **args) {
   exit(0);
 }
 
+static int b_export(char **args)
+{
+  char *var = args[1];
+  if (var == NULL) {
+    fprintf(stderr, "Variable is required\n");
+    return 1;
+  }
+  if (args[2] != NULL) {
+    fprintf(stderr, "Only 1 variable at a time can be set\n");
+    return 1;
+  }
+  if (putenv(var) != 0) {
+    perror("Cannot putenv");
+    return 1;
+  }
+  return 0;
+}
+
 char *builtins_str[] = {
   "cd",
-  "exit"
+  "exit",
+  "export",
 };
 
 int (*builtins_func[]) (char **) = {
   &b_cd,
-  &b_exit
+  &b_exit,
+  &b_export,
 };
 
 static unsigned builtins_count() {
