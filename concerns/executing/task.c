@@ -145,6 +145,10 @@ void task_free(task task) {
     free((char *)vector_get(task->arguments, i));
   vector_free(task->arguments);
 
+  size_t redirs = vector_size(task->redirects);
+  for (size_t i = 0; i < redirs; i += 2)
+    free((char *)vector_get(task->redirects, i));
   vector_free(task->redirects);
+
   free(task);
 }
