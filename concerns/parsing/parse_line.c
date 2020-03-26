@@ -1,5 +1,4 @@
 #include "parse_line.h"
-#include "ensure_no_pipes.h"
 #include "expand_globs.h"
 #include "split_into_words.h"
 #include <data_types/redirects.h>
@@ -72,9 +71,6 @@ int parse_line(char *line, task *output) {
     ret = PARSE_EMPTY;
     goto end;
   }
-
-  if (!ensure_no_pipes(l, words)) // FIXME: support pipes
-    goto end;
 
   // eat_variables(words); // FIXME: support setting variables
   char *command = eat_command_name(l, words);
