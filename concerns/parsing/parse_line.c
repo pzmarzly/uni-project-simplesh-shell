@@ -1,4 +1,4 @@
-#include "process_line.h"
+#include "parse_line.h"
 #include "ensure_no_pipes.h"
 #include "expand_globs.h"
 #include "split_into_words.h"
@@ -54,7 +54,7 @@ static redirects eat_redirects(string line, vector words) {
   return ret;
 }
 
-int process_line(char *line, task *output) {
+int parse_line(char *line, task *output) {
   int ret = PARSE_ERROR;
   string l = string_from_cstr(line);
   expand_globs(l);

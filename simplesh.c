@@ -1,4 +1,4 @@
-#include <parsing/process_line.h>
+#include <parsing/parse_line.h>
 #include <readline/history.h>
 #include <readline/readline.h>
 #include <state/prompt.h>
@@ -17,7 +17,7 @@ int main() {
       break;
 
     task task;
-    int status = process_line(line, &task);
+    int status = parse_line(line, &task);
     if (status == PARSE_OK) {
       add_history(line);
 #ifdef DEBUG
