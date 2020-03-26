@@ -139,7 +139,12 @@ int task_run(task task) {
 
 void task_free(task task) {
   free(task->command);
+
+  size_t args = vector_size(task->arguments);
+  for (size_t i = 0; i < args; i++)
+    free((char *)vector_get(task->arguments, i));
   vector_free(task->arguments);
+
   vector_free(task->redirects);
   free(task);
 }

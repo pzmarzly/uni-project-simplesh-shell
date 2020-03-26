@@ -17,8 +17,10 @@ static vector eat_arguments(char *line, words words) {
   vector ret = vector_new();
   while (vector_size(words) > 0) {
     char *word = first_word(words, line);
-    if (word[0] == '>' || word[0] == '<' || word[0] == '|')
+    if (word[0] == '>' || word[0] == '<' || word[0] == '|') {
+      free(word);
       break;
+    }
     vector_push(ret, (any_t)word);
     delete_first_word(words);
   }
@@ -30,17 +32,21 @@ static redirects eat_redirects(char *line, vector words) {
   char last_seen = '\0';
   while (vector_size(words) > 0) {
     char *word = first_word(words, line);
-    if (word[0] == '|')
+    if (word[0] == '|') {
+      free(word);
       break;
+    }
 
     if (strlen(word) == 1 && (word[0] == '>' || word[0] == '<')) {
       last_seen = word[0];
       delete_first_word(words);
+      free(word);
       continue;
     }
     if (strlen(word) == 2 && word[0] == '2' && word[1] == '>') {
       last_seen = word[0];
       delete_first_word(words);
+      free(word);
       continue;
     }
 
@@ -48,15 +54,19 @@ static redirects eat_redirects(char *line, vector words) {
       vector_push(ret, (any_t)last_seen);
       vector_push(ret, (any_t)word);
       last_seen = '\0';
+      delete_first_word(words);
     } else if (word[0] == '>' || word[0] == '<') {
       vector_push(ret, (any_t)word[0]);
       vector_push(ret, (any_t)(word + 1));
+      delete_first_word(words);
     } else if (word[0] == '2' && word[1] == '>') {
       vector_push(ret, (any_t)word[0]);
       vector_push(ret, (any_t)(word + 2));
+      delete_first_word(words);
+    } else {
+      delete_first_word(words);
+      free(word);
     }
-
-    delete_first_word(words);
   }
   return ret;
 }
