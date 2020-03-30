@@ -87,7 +87,6 @@ static void enable_redirects(task task) {
         dup2(fd, STDOUT_FILENO);
         close(fd);
       }
-      free(first_redirect_path(task->redirects) - 1);
     } else if (direction == '2') {
       int fd = open(first_redirect_path(task->redirects), O_CREAT | O_WRONLY | O_TRUNC);
       if (fd == -1) {
@@ -96,7 +95,6 @@ static void enable_redirects(task task) {
         dup2(fd, STDERR_FILENO);
         close(fd);
       }
-      free(first_redirect_path(task->redirects) - 2);
     } else if (direction == '<') {
       int fd = open(first_redirect_path(task->redirects), O_RDONLY);
       if (fd == -1) {
@@ -105,7 +103,6 @@ static void enable_redirects(task task) {
         dup2(fd, STDIN_FILENO);
         close(fd);
       }
-      free(first_redirect_path(task->redirects) - 1);
     }
 
     delete_first_redirect(task->redirects);
